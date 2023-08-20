@@ -11,7 +11,7 @@ These instructions will help you set up and run the project on your local machin
 Before you begin, make sure you have the following prerequisites installed:
 
 - Python (3.x recommended)
-- Required Python packages: `vaderSentiment`, `textblob`, `mastodon.py`
+- Required Python packages: `vaderSentiment`, `textblob`, `mastodon.py` 
 
 You can install the required packages using `pip`:
 
