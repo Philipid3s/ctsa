@@ -103,7 +103,7 @@ def predict_reuters_class(text, model, token):
     return predi_class, predi_probabilities
 
 # text_to_predict = "Weak demand from the construction industry has pushed zinc prices to levels which leave some miners with little gain"
-# text_to_predict = " Chocolate makers like Hershey and Mondelez face tougher trading conditions over the next year as they attempt to pass on soaring cocoa costs to cash-strapped consumers who are cutting back."
+text_to_predict = " Chocolate makers like Hershey and Mondelez face tougher trading conditions over the next year as they attempt to pass on soaring cocoa costs to cash-strapped consumers who are cutting back."
 
 predicted_class, predicted_probabilities = predict_reuters_class(text_to_predict, loaded_model, tokenizer)
 
