@@ -1,8 +1,10 @@
 from mastodon import Mastodon
-
 import re
-
 import configparser
+from textblob import TextBlob
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 # Create a configparser instance and read the config file
 config = configparser.ConfigParser()
@@ -39,12 +41,36 @@ def search_tag(tag):
         # Append the cleaned content to the list
         mylist.append(result)
 
-    # Return the list of cleaned post content
     return mylist
 
-# Call the search_tag function to retrieve posts with the "bitcoin" hashtag
-listposts = search_tag("bitcoin")
+# Define a function to calculate the average polarity score of posts
+def calculate_average_polarity(posts):
+    total_polarity = 0
+    num_posts = len(posts)
 
-# Print each cleaned post content
-for post in listposts:
-    print(f"{post}")
+    for post in posts:
+        analysis = TextBlob(post)
+        total_polarity += analysis.sentiment.polarity
+
+    if num_posts > 0:
+        average_polarity = total_polarity / num_posts
+        return average_polarity
+    else:
+        return None
+
+@app.route('/average_polarity', methods=['GET'])
+def get_average_polarity():
+    tag = request.args.get('tag', default=None)
+
+    if tag is not None:
+        listposts = search_tag(tag)
+        average_polarity = calculate_average_polarity(listposts)
+        if average_polarity is not None:
+            return jsonify({'tag': tag, 'average_polarity': average_polarity})
+        else:
+            return jsonify({'tag': tag, 'message': 'No posts found with the specified tag.'}), 404
+    else:
+        return jsonify({'message': 'Please provide a "tag" parameter in the URL.'}), 400
+
+if __name__ == '__main__':
+    app.run(debug=True)
