@@ -3,6 +3,7 @@ import re
 import configparser
 from textblob import TextBlob
 from flask import Flask, request, jsonify
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -66,7 +67,13 @@ def get_average_polarity():
         listposts = search_tag(tag)
         average_polarity = calculate_average_polarity(listposts)
         if average_polarity is not None:
-            return jsonify({'tag': tag, 'average_polarity': average_polarity})
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            result = {
+                'tag': tag,
+                'average_polarity': average_polarity,
+                'timestamp': current_time
+            }
+            return jsonify(result)
         else:
             return jsonify({'tag': tag, 'message': 'No posts found with the specified tag.'}), 404
     else:
